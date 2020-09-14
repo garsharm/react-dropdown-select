@@ -232,11 +232,13 @@ export class Select extends Component {
     }
 
     if (action === 'open' && !this.state.dropdown) {
+      this.updateSelectBounds();
       return this.setState({ dropdown: true });
     }
 
     if (action === 'toggle') {
       this.select.current.focus();
+      this.updateSelectBounds();
       return this.setState({ dropdown: !this.state.dropdown });
     }
 
