@@ -74,7 +74,8 @@ export class Select extends Component {
       values: props.values,
       search: '',
       selectBounds: {},
-      cursor: null
+      cursor: null,
+      searchResults: props.options,
     };
 
     this.methods = {
@@ -128,6 +129,10 @@ export class Select extends Component {
         }
       );
       this.updateSelectBounds();
+    }
+
+    if (prevProps.options !== this.props.options) {
+      this.setState({ searchResults: this.searchResults() });
     }
 
     if (prevState.values !== this.state.values) {
@@ -227,7 +232,8 @@ export class Select extends Component {
 
       return this.setState({
         dropdown: false,
-        search: this.props.clearOnBlur ? '' : this.state.search
+        search: this.props.clearOnBlur ? '' : this.state.search,
+        searchResults: this.props.options,
       });
     }
 
@@ -291,7 +297,9 @@ export class Select extends Component {
     });
 
     this.setState({
-      search: event.target.value
+      search: event.target.value,
+    }, () => {
+      this.setState({ searchResults: this.searchResults() })
     });
   };
 
@@ -393,7 +401,7 @@ export class Select extends Component {
   };
 
   handleKeyDownFn = ({ event, state, props, methods, setState }) => {
-    const { cursor } = state;
+    const { cursor, searchResults } = state;
     const escape = event.key === 'Escape';
     const enter = event.key === 'Enter';
     const arrowUp = event.key === 'ArrowUp';
@@ -425,7 +433,7 @@ export class Select extends Component {
     }
 
     if (enter) {
-      const currentItem = methods.searchResults()[cursor];
+      const currentItem = searchResults[cursor];
       if (currentItem && !currentItem.disabled) {
         if (props.create && valueExistInSelected(state.search, state.values, props)) {
           return null;
@@ -435,7 +443,7 @@ export class Select extends Component {
       }
     }
 
-    if ((arrowDown || (tab && state.dropdown)) && methods.searchResults().length === cursor) {
+    if ((arrowDown || (tab && state.dropdown)) && searchResults.length === cursor) {
       return setState({
         cursor: 0
       });
@@ -455,11 +463,11 @@ export class Select extends Component {
 
     if ((arrowUp || (shiftTab && state.dropdown)) && cursor === 0) {
       setState({
-        cursor: methods.searchResults().length
+        cursor: searchResults.length
       });
     }
 
-    if (backspace && props.multi && props.backspaceDelete && this.getInputSize() === 0) {
+    if (backspace && props.backspaceDelete && this.getInputSize() === 0) {
       this.setState({
         values: this.state.values.slice(0, -1)
       });
@@ -492,6 +500,8 @@ export class Select extends Component {
       <ClickOutside onClickOutside={(event) => this.dropDown('close', event)}>
         <ReactDropdownSelect
           onKeyDown={this.handleKeyDown}
+          aria-label="Dropdown select"
+          aria-expanded={this.state.dropdown}
           onClick={(event) => this.dropDown('open', event)}
           tabIndex={this.props.disabled ? '-1' : '0'}
           direction={this.props.direction}

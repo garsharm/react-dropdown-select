@@ -1,3 +1,28 @@
+### v4.7.4
+*  Apply search filter when new options arrive via props (#163) [View](https://github.com/sanusart/react-dropdown-select/commit/c1e245aed07486b696ba23b1120b6f0f599bc4e2)
+
+### v4.7.3
+*  FIX (Input): breaking in two lines due to input, closes #138 (#148) [View](https://github.com/sanusart/react-dropdown-select/commit/66bd7219c2852a372441a7ddffb160abc8cfaf98)
+
+### v4.7.2
+*  Bump ini from 1.3.5 to 1.3.7 (#144) [View](https://github.com/sanusart/react-dropdown-select/commit/c321c092ae462dfd0bfa36206d9cdd004830b379)
+*  FIX (aria)[#146]: add aria-expanded, closes #146 [View](https://github.com/sanusart/react-dropdown-select/commit/c81026b8f52cc3c24400b050a4a0075e10f5fddf)
+
+### v4.7.1
+*  FIX (single): allow to clear with backspace, closes #141 [View](https://github.com/sanusart/react-dropdown-select/commit/df466b8e307244189cf1b360ae801b7a49d3d764)
+
+### v4.7.0
+*  FIX (searchFn)[#101] searchFn callback should only call once when typing in the search bar, #134, #133 (#136) [View](https://github.com/sanusart/react-dropdown-select/commit/64a737af3b50bf21c534606f4b27bbe60ffcbe03)
+
+### v4.6.1
+*  Revert "FIX (searchFn)[#101] searchFn callback should only call once when typing in the search bar (#131)" (#135) [View](https://github.com/sanusart/react-dropdown-select/commit/30d7a78c330c50d4339226d5dfe27406d833af1a)
+
+### v4.6.0
+*  FIX (searchFn)[#101] searchFn callback should only call once when typing in the search bar (#131) [View](https://github.com/sanusart/react-dropdown-select/commit/12164f95e5e152a6eb8643f6700186e8611530b4)
+
+### v4.5.2
+*  FIX (style): Accepts a short color (#127) [View](https://github.com/sanusart/react-dropdown-select/commit/56dbe23c1f5224993f9979341d1fcc5f6615b170)
+
 ### v4.5.1
 *  FIX (duplicates)[#116]: more proper way to check dupes, closes #116 [View](https://github.com/sanusart/react-dropdown-select/commit/6f06054de39007176d877c2d91b20cadf99fcd2c)
 

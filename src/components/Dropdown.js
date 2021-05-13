@@ -43,13 +43,14 @@ const Dropdown = ({ props, state, methods }) => (
       <React.Fragment>
         {props.create && state.search && !valueExistInSelected(state.search, [...state.values, ...props.options], props) && (
           <AddNew
+            role="button"
             className={`${LIB_NAME}-dropdown-add-new`}
             color={props.color}
             onClick={() => methods.createNew(state.search)}>
             {props.createNewLabel.replace('{search}', `"${state.search}"`)}
           </AddNew>
         )}
-        {methods.searchResults().length === 0 ? (
+        {state.searchResults.length === 0 ? (
           <NoData
             className={`${LIB_NAME}-no-data`}
             state={state}
@@ -57,19 +58,18 @@ const Dropdown = ({ props, state, methods }) => (
             methods={methods}
           />
         ) : (
-          methods
-            .searchResults()
-            .map((item, itemIndex) => (
-              <Item
-                key={item[props.valueField]}
-                item={item}
-                itemIndex={itemIndex}
-                state={state}
-                props={props}
-                methods={methods}
-              />
-            ))
-        )}
+            state.searchResults
+              .map((item, itemIndex) => (
+                <Item
+                  key={item[props.valueField]}
+                  item={item}
+                  itemIndex={itemIndex}
+                  state={state}
+                  props={props}
+                  methods={methods}
+                />
+              ))
+          )}
       </React.Fragment>
     )}
   </DropDown>
