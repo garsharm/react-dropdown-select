@@ -90,7 +90,6 @@ const DropDown = styled.div`
       left: ${selectBounds.left - 1}px;`
       : 'left: -1px;'};
   border: 1px solid #ccc;
-  width: ${({ selectBounds }) => selectBounds.width}px;
   padding: 0;
   display: flex;
   flex-direction: column;
