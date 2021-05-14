@@ -107,8 +107,6 @@ export class Select extends Component {
     isomorphicWindow().addEventListener('resize', debounce(this.updateSelectBounds));
     isomorphicWindow().addEventListener('scroll', debounce(this.onScroll));
 
-    this.dropDown('close');
-
     if (this.select) {
       this.updateSelectBounds();
     }
@@ -139,9 +137,9 @@ export class Select extends Component {
       this.updateSelectBounds();
     }
 
-    if (prevState.values !== this.state.values && this.props.closeOnSelect) {
-    this.dropDown('close');
-    }
+    // if (prevState.values !== this.state.values && this.props.closeOnSelect) {
+    // this.dropDown('close');
+    // }
 
     if (prevProps.multi !== this.props.multi) {
       this.updateSelectBounds();
@@ -222,7 +220,8 @@ export class Select extends Component {
       return this.setState({ dropdown: true });
     }
 
-    if (action === 'close' && this.state.dropdown) {
+    if (action === 'close' && this.state.dropdown && force === true) {
+
       this.select.current.blur();
 
       return this.setState({
@@ -252,9 +251,8 @@ export class Select extends Component {
       if (
         valueExistInSelected(getByPath(item, this.props.valueField), this.state.values, this.props)
       ) {
-        return this.removeItem(null, item, false);
+        return this.removeItem(null, item, this.props.closeOnSelect);
       }
-
       this.setState({
         values: [...this.state.values, item]
       });
@@ -270,12 +268,13 @@ export class Select extends Component {
   };
 
   removeItem = (event, item, close = false) => {
-    if (event && close) {
+    if (event) {
       event.preventDefault();
       event.stopPropagation();
-      this.dropDown('close');
     }
-
+    if (close){
+      this.dropDown('close', null, close);
+    }
     this.setState({
       values: this.state.values.filter(
         (values) =>
@@ -420,7 +419,7 @@ export class Select extends Component {
     }
 
     if (escape) {
-      this.dropDown('close');
+      this.dropDown('close', null, true);
     }
 
     if (enter) {
@@ -468,11 +467,15 @@ export class Select extends Component {
   renderDropdown = () =>
     this.props.portal ? (
       ReactDOM.createPortal(
-        <Dropdown props={this.props} state={this.state} methods={this.methods} />,
-        this.dropdownRoot
+        <ClickOutside onClickOutside={(event) => this.dropDown('close', event, true)}>
+        <Dropdown props={this.props} state={this.state} methods={this.methods} />
+        </ClickOutside>,
+        this.props.portal
       )
     ) : (
+      <ClickOutside onClickOutside={(event) => this.dropDown('close', event, true)}>
       <Dropdown props={this.props} state={this.state} methods={this.methods} />
+      </ClickOutside>
     );
 
   createNew = (item) => {
@@ -488,7 +491,6 @@ export class Select extends Component {
 
   render() {
     return (
-      <ClickOutside onClickOutside={(event) => this.dropDown('close', event)}>
         <ReactDropdownSelect
           onKeyDown={this.handleKeyDown}
           onClick={(event) => this.dropDown('open', event)}
@@ -537,7 +539,6 @@ export class Select extends Component {
 
           {this.state.dropdown && !this.props.disabled && this.renderDropdown()}
         </ReactDropdownSelect>
-      </ClickOutside>
     );
   }
 }
@@ -605,7 +606,7 @@ const ReactDropdownSelect = styled.div`
   cursor: pointer;
   min-height: 36px;
   ${({ disabled }) =>
-    disabled ? 'cursor: not-allowed;pointer-events: none;opacity: 0.3;' : 'pointer-events: all;'}
+  disabled ? 'cursor: not-allowed;pointer-events: none;opacity: 0.3;' : 'pointer-events: all;'}
 
   :hover,
   :focus-within {
