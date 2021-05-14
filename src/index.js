@@ -261,7 +261,7 @@ export class Select extends Component {
         values: [item]
       });
     }
-
+    this.dropDown('close', null, this.props.closeOnSelect);
     this.props.clearOnSelect && this.setState({ search: '' });
 
     return true;
