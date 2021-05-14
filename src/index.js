@@ -131,6 +131,7 @@ export class Select extends Component {
     }
 
     if (prevState.values !== this.state.values) {
+      console.log("g1");
       this.props.onChange(this.state.values);
       this.updateSelectBounds();
     }
@@ -140,7 +141,8 @@ export class Select extends Component {
     }
 
     if (prevState.values !== this.state.values && this.props.closeOnSelect) {
-      this.dropDown('close');
+  console.log("g2");  
+    this.dropDown('close');
     }
 
     if (prevProps.multi !== this.props.multi) {
@@ -239,6 +241,7 @@ export class Select extends Component {
     if (action === 'toggle') {
       this.select.current.focus();
       this.updateSelectBounds();
+      console.log("g3");
       return this.setState({ dropdown: !this.state.dropdown });
     }
 
