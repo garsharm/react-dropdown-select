@@ -261,7 +261,6 @@ export class Select extends Component {
     } else {
       this.setState({
         values: [item],
-        dropdown: false
       });
     }
 
