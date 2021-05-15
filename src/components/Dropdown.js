@@ -23,14 +23,21 @@ const dropdownPosition = (props, methods) => {
   return 'bottom';
 };
 
-const getBoundingStyle = (parentPosition, windowAvailableWidth, windowAvailableHeight, dropdownGap) => {
+const getBoundingStyle = (parentPosition, dropdownGap) => {
   if (!parentPosition) return '';
+  var body = document.body,
+    html = document.documentElement;
+  const windowAvailableHeight =Math.max( body.scrollHeight, body.offsetHeight,
+    html.clientHeight, html.scrollHeight, html.offsetHeight );
+  const windowAvailableWidth = Math.max( body.scrollWidth, body.offsetWidth,
+    html.clientWidth, html.scrollWidth, html.offsetWidth );
   const minDistanceFromRight = windowAvailableWidth - parentPosition.right;
   const minDistanceFromLeft = parentPosition.left;
-  const minDistanceFromTop = parentPosition.top + parentPosition.height + dropdownGap;
-  const minDistanceFromBottom = windowAvailableHeight - parentPosition.bottom - parentPosition.height - dropdownGap;
+  const minDistanceFromTop = parentPosition.top;
+  const minDistanceFromBottom = windowAvailableHeight - parentPosition.bottom;
+  const height = parentPosition.height;
   const horizontalStyle = minDistanceFromLeft > minDistanceFromRight ? {right: minDistanceFromRight} : {left: minDistanceFromLeft};
-  const verticalStyle = minDistanceFromTop > minDistanceFromBottom ? {bottom: minDistanceFromBottom} : {top: minDistanceFromTop};
+  const verticalStyle = minDistanceFromTop > minDistanceFromBottom ? {bottom: minDistanceFromBottom+dropdownGap+height} : {top: minDistanceFromTop+height+dropdownGap};
   return Object.entries({...horizontalStyle, ...verticalStyle}).map(([key,value]) => `${key}: ${value>10?value:10}px`).join("; ")+";"
 };
 
@@ -44,7 +51,7 @@ const Dropdown = ({ props, state, methods }) => {
     portal={props.portal}
     dropdownGap={props.dropdownGap}
     dropdownHeight={props.dropdownHeight}
-    boundingStyle={getBoundingStyle(state.selectBounds,window.screen.availWidth, window.screen.availHeight, props.dropdownGap)}
+    boundingStyle={getBoundingStyle(state.selectBounds, props.dropdownGap)}
     className={`${LIB_NAME}-dropdown ${LIB_NAME}-dropdown-position-${dropdownPosition(
       props,
       methods
