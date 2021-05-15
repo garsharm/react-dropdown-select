@@ -106,8 +106,7 @@ const DropDown = styled.div`
   box-shadow: 0 0 10px 0 ${() => hexToRGBA('#000000', 0.2)};
   max-height: ${({ dropdownHeight }) => dropdownHeight};
   overflow: auto;
-  z-index: 9;
-
+  z-index: 9999999 !important;
   :focus {
     outline: none;
   }
