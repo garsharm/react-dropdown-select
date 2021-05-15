@@ -35,7 +35,6 @@ const getBoundingStyle = (parentPosition, windowAvailableWidth, windowAvailableH
 };
 
 const Dropdown = ({ props, state, methods }) => {
-  console.log("garvit", state.selectBounds, props.dropdownGap, props.dropdownHeight);
   return<DropDown
     tabIndex="-1"
     aria-expanded="true"
