@@ -23,8 +23,20 @@ const dropdownPosition = (props, methods) => {
   return 'bottom';
 };
 
-const Dropdown = ({ props, state, methods }) => (
-  <DropDown
+const getBoundingStyle = (parentPosition, windowAvailableWidth, windowAvailableHeight, dropdownGap) => {
+  if (!parentPosition) return '';
+  const minDistanceFromRight = windowAvailableWidth - parentPosition.right;
+  const minDistanceFromLeft = parentPosition.left;
+  const minDistanceFromTop = parentPosition.top + parentPosition.height + dropdownGap;
+  const minDistanceFromBottom = windowAvailableHeight - parentPosition.bottom - parentPosition.height - dropdownGap;
+  const horizontalStyle = minDistanceFromLeft > minDistanceFromRight ? {right: minDistanceFromRight} : {left: minDistanceFromLeft};
+  const verticalStyle = minDistanceFromTop > minDistanceFromBottom ? {bottom: minDistanceFromBottom} : {top: minDistanceFromTop};
+  return Object.entries({...horizontalStyle, ...verticalStyle}).map(([key,value]) => `${key}: ${value>10?value:10}px`).join("; ")+";"
+};
+
+const Dropdown = ({ props, state, methods }) => {
+  console.log("garvit", state.selectBounds, props.dropdownGap, props.dropdownHeight);
+  return<DropDown
     tabIndex="-1"
     aria-expanded="true"
     role="list"
@@ -33,6 +45,7 @@ const Dropdown = ({ props, state, methods }) => (
     portal={props.portal}
     dropdownGap={props.dropdownGap}
     dropdownHeight={props.dropdownHeight}
+    boundingStyle={getBoundingStyle(state.selectBounds,window.screen.availWidth, window.screen.availHeight, props.dropdownGap)}
     className={`${LIB_NAME}-dropdown ${LIB_NAME}-dropdown-position-${dropdownPosition(
       props,
       methods
@@ -73,22 +86,11 @@ const Dropdown = ({ props, state, methods }) => (
       </React.Fragment>
     )}
   </DropDown>
-);
+};
 
 const DropDown = styled.div`
   position: absolute;
-  ${({ selectBounds, dropdownGap, dropdownPosition }) =>
-    dropdownPosition === 'top'
-      ? `bottom: ${selectBounds.height + 2 + dropdownGap}px`
-      : `top: ${selectBounds.height + 2 + dropdownGap}px`};
-
-  ${({ selectBounds, dropdownGap, dropdownPosition, portal }) =>
-    portal
-      ? `
-      position: fixed;
-      ${dropdownPosition === 'bottom' ? `top: ${selectBounds.bottom + dropdownGap}px;` : `bottom: ${isomorphicWindow().innerHeight - selectBounds.top + dropdownGap}px;`}
-      left: ${selectBounds.left - 1}px;`
-      : 'left: -1px;'};
+  ${({boundingStyle}) => boundingStyle}
   border: 1px solid #ccc;
   padding: 0;
   display: flex;

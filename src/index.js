@@ -221,8 +221,7 @@ export class Select extends Component {
     }
 
     if (action === 'close' && this.state.dropdown && force === true) {
-
-      this.select.current.blur();
+      if (this.select.current) this.select.current.blur();
 
       return this.setState({
         dropdown: false,
@@ -316,6 +315,7 @@ export class Select extends Component {
     this.setState({
       values: []
     });
+    this.dropDown('close', null, this.props.closeOnSelect);
   };
 
   selectAll = (valuesList = []) => {
