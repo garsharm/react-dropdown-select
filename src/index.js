@@ -468,12 +468,12 @@ export class Select extends Component {
     }
   };
 
-  renderDropdown = () =>
+  renderDropdown = (show) =>
     this.props.portal ? (
       ReactDOM.createPortal(
-        <ClickOutside uid={this.state.dropdownUID} onClickOutside={(event) => this.dropDown('close', event, true)}>
+        <>{show && <ClickOutside uid={this.state.dropdownUID} onClickOutside={(event) => this.dropDown('close', event, true)}>
         <Dropdown props={this.props} state={this.state} methods={this.methods} />
-        </ClickOutside>,
+        </ClickOutside>}</>,
         this.props.portal
       )
     ) : (
@@ -541,7 +541,7 @@ export class Select extends Component {
             />
           )}
 
-          {this.state.dropdown && !this.props.disabled && this.renderDropdown()}
+          {this.renderDropdown(this.state.dropdown && !this.props.disabled)}
         </ReactDropdownSelect>
     );
   }
