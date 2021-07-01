@@ -22,10 +22,10 @@ class ClickOutside extends React.Component {
   };
 
   render() {
-    const { className, children } = this.props;
+    const { className, children, uid } = this.props;
 
     return (
-      <div className={className} ref={this.container}>
+      <div className={className} id={uid} ref={this.container}>
         {children}
       </div>
     );

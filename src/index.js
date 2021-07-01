@@ -10,7 +10,7 @@ import Loading from './components/Loading';
 import Clear from './components/Clear';
 import Separator from './components/Separator';
 import DropdownHandle from './components/DropdownHandle';
-
+import {v4 as uuidv4} from 'uuid';
 import {
   debounce,
   hexToRGBA,
@@ -68,13 +68,13 @@ export class Select extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       dropdown: false,
       values: props.values,
       search: '',
       selectBounds: {},
-      cursor: null
+      cursor: null,
+      dropdownUID: uuidv4()
     };
 
     this.methods = {
@@ -467,7 +467,7 @@ export class Select extends Component {
   renderDropdown = () =>
     this.props.portal ? (
       ReactDOM.createPortal(
-        <ClickOutside onClickOutside={(event) => this.dropDown('close', event, true)}>
+        <ClickOutside key={this.state.dropdownUID} uid={this.state.dropdownUID} onClickOutside={(event) => this.dropDown('close', event, true)}>
         <Dropdown props={this.props} state={this.state} methods={this.methods} />
         </ClickOutside>,
         this.props.portal
